@@ -1,0 +1,27 @@
+<div class="divcont kopfzeile">
+    <div class="gesTab">
+        <table class="table table-hover table-success table striped table-responsive">
+            <tr>
+                <% for(let i=0; i<end;i++){ %>
+
+                    <th>
+                        <%= headName[i] %>
+                    </th>
+
+                    <% } %>
+            </tr>
+          
+            <% for(let a=0; a<datLength;a++){ %>
+               <tr>
+
+                       <% datSatz=Object.values(datErgebnis[a])%>
+                            <% for(let i=0; i<end;i++){ %>
+                                <td>
+                                    <%= datSatz[i] %>
+                                </td>
+                                <% } %>
+                                    <% } %>
+                            </tr>
+        </table>
+    </div>
+</div>

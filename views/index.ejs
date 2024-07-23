@@ -1,0 +1,47 @@
+<%- include("layouts/default") %>
+<div class="container d-flex justify-content-center ">
+  <div class="kopfzeile">
+    <div>
+      <div class="d-flex justify-content-center m-4 ">
+        <h1 style="color: bisque;" >HOME</h1>
+      </div>
+
+      <div>
+        <form action="/info">
+          <button type="submit">Info</button>
+        </form>
+      </div> <br>
+
+      <div>
+        <form action="/calcauswahl">
+          <button type="submit">Kalkulation</button>
+        </form>
+      </div> <br>
+      <div>
+        <form action="/satzid">
+          <button type="submit">Danfoss Bestellung erfassen</button>
+        </form>
+      </div><br>
+      <div>
+        <form action="/dbsuchergebnis">
+          <button type="submit">Danfoss db durchsuchen</button>
+        </form>
+      </div><br>
+      <div>
+        <form action="/stuecklneu">
+          <button type="submit">Artikel in Stückliste erfassen</button>
+        </form>
+      </div>     
+      <div><br>
+        <form action="/fepalist">
+          <button type="submit">Fepa Liste bearbeiten</button>
+        </form>
+      </div>
+      <div><br>
+        <form action="/inputmail">
+          <button type="submit">Fehlteile Bestellung</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

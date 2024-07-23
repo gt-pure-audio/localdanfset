@@ -1,0 +1,44 @@
+<%- include("layouts/default") %>
+
+<div class="container">
+    <div class="col-12 d-flex justify-content-center mt-4">
+        <h1 style="color: blanchedalmond"> Ausgabe Tabelle</h1>
+    </div>
+    <div class="col-12 d-flex justify-content-center mt-4">
+        <form action="../.">
+            <button type="submit">home</button><br><br>
+        </form>
+    </div>
+    
+        <div class="container">
+            <div class="gesTab">
+
+                <table class="table table-hover table-success table striped table-responsive">
+                    <tr>
+                        <% for(let i=0; i<end;i++){ %>
+
+                            <th>
+                                <%= headName[i] %>
+                            </th>
+
+                            <% } %>
+                    </tr>
+                    <% for(let a=0; a<datLength;a++){ %>
+                        </tr>                       
+
+                        <% datSatz=Object.values(datErgebnis[a])%>
+
+                            <% for(let i=0; i<end;i++){ %>                               
+                                <td  >
+                                    <% let finder=datSatz[i] %>
+                                            <%= finder %>
+                                </td>
+                                <% } %>
+                                    <% } %>
+                                        </tr>
+                </table>
+            </div>
+        </div>
+    
+   
+</div>

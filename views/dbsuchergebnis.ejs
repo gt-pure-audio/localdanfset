@@ -1,0 +1,29 @@
+<%- include("layouts/default") %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center" >
+            <h1 style="color: bisque;">Tabellen in aktueller Datenbank:</h1>
+        </div>       
+        <div class="col-12 d-flex justify-content-center">
+            <div>
+                <% let datresult=Object.values(ergebnis[2]) %>
+                    <% for(let i=0; i<end;i++){ %>
+                        <div>
+                            <% datresult=Object.values(ergebnis[i]) %>
+                                <form action="/edit/<%=datresult%>">
+                                    <button type="submit">
+                                        <%=datresult%>
+                                    </button>
+                                </form>
+                        </div> <br>
+                        <% } %>
+                            <div>
+                                <form action="../.">
+                                    <button type="submit">home</button>
+                                </form>
+                            </div>
+            </div>
+        </div>
+    </div>
+</div>

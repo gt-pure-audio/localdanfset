@@ -1,0 +1,77 @@
+<%- include("layouts/default") %>
+
+<body >
+  <div >
+    <div class = container>
+    <form action="mailto:bassbone62@gmx.de" method="get" enctype="text/plain" class="mt-6">
+      Betreff:<br>
+     <input type="text" name="subject" placeholder="ID Bestellnr" value="ID <%= satz_nr %> Fehlteile"><br>
+        
+        <input type="submit" value="E-Mail aufrufen" class="mt-4">
+      </form>
+    
+    </div>
+    <br><br>
+    <div class="container" >
+ <div class="col-6" style="background-color: white;" >
+    <div id="signature_container" >
+      <table class="table table-bordered">
+       
+        <tbody >
+          <tr style="height: 80px;">            
+            <td style="font-size: 25px;">Bestellung Nr.</td>
+            <td style="font-size: 25px;"><%= best_nr %></td>
+          </tr>
+          <tr style="height: 80px;">            
+            <td style="font-size: 25px;">Produktionsorder Nr.</td>
+            <td style="font-size: 25px;"><%= ord_nr %></td>
+          </tr>
+          <tr style="height: 80px;">            
+            <td style="font-size: 25px;">Dichtungssatz Nr.</td>
+            <td style="font-size: 25px;"><%= satz_nr %></td>
+          </tr>
+          <tr style="height: 80px;">            
+            <td style="font-size: 25px;">Komponente Nr.  (Fehlteil)</td>
+            <td style="font-size: 25px;"><%= ETnr %></td>
+          </tr>
+          <tr style="height: 80px;">            
+            <td style="font-size: 25px;">Sollmenge</td>
+            <td style="font-size: 25px;"><%= Sollmenge %></td>
+          </tr>
+          <tr style="height: 80px;">            
+            <td style="font-size: 25px;">Istmenge</td>
+            <td style="font-size: 25px;"><%= Istmenge %></td>
+          </tr>
+          <tr style="height: 80px;">            
+            <td style="font-size: 25px;">Fehlmenge/Überlieferung</td>
+            <td style="font-size: 25px;"><%= Fehlmenge %></td>
+          </tr>
+         
+          re
+        </tbody>
+      </table>
+    </div>
+    </div>
+   
+<input type="button" onclick="selectElementContents( document.getElementById('signature_container') );" value="Copy to Clipboard" class="mt-4">
+</div>
+</div>
+
+
+<script>
+  function selectElementContents(el) {
+    var body = document.body,
+      range, sel;
+    if (document.createRange && window.getSelection) {
+      range = document.createRange();
+      sel = window.getSelection();
+      sel.removeAllRanges();
+      range.selectNodeContents(el);
+      sel.addRange(range);
+    }
+    document.execCommand("Copy");
+  }
+</script>
+
+  </body>
+  </html>

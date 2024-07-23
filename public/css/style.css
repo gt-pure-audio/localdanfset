@@ -1,0 +1,47 @@
+.eingabecontainer {
+    display: flex;
+    justify-content: flex-start;
+}
+
+h1{
+    color: bisque;
+}
+
+h2 {
+    color: bisque;
+}
+
+button {
+    width: 300px;
+    height: 30px;
+    font-size: 18px;
+    font-weight: 300;
+    color: white;
+    background-color: brown;
+
+}
+
+button:hover {
+    background-color: blueviolet;
+}
+
+label {
+    display: block;
+    color: #0b0a0a;
+}
+input {
+    width: 200px;
+}
+
+
+#topbutton:hover {
+    background-color: blueviolet;
+     box-shadow: rgb(47, 23, 10);
+}
+
+#topbutton {
+    width: 300px;
+    height: 100px;
+   border: none;
+    background-color: #52bde4;
+}

@@ -1,0 +1,286 @@
+<div class="kopfzeile">
+    <div>
+        <h1> Ausgabe Tabelle:_ <%= suchID %>
+        </h1>
+
+        <form action="../.">
+            <button type="submit">home</button>
+        </form><br>
+        <div id="btnbody">
+            <form>
+                <button class="switch" type="submit" id="del">Datensatz löschen</button>
+            </form>
+
+
+
+
+            <label for="suzewt">Wert der Änderung:</label>
+            <input type="text" name="suchzellenwert" id="suzewt" style="height: 20px;">
+
+
+
+
+            <form>
+                <button class="switch" type="submit" id="find">Datensatz der Änderung</button><br><br>
+            </form>
+
+            <p name="Suchkopf" id="suko" style="color: bisque; margin :10px;"> Spaltenkopf </p>
+            <p name="Suchwert" id="suwe" style="color: bisque; margin: 10px"> Wert </p>
+
+
+
+            <form>
+                <button class="switch" type="submit" id="change">Spalten Änderung</button><br><br>
+            </form>
+
+            <p name="suchzelle" id="suze" style="color: bisque; margin :10px;"> Änderung Spalte </p>
+            <form>
+                <button class="switch" type="submit" id="send">senden</button><br><br>
+            </form>
+
+        </div>
+        <br>
+
+        <div class="divcont">
+            <div class="gesTab">
+
+                <table id="gesamttab">
+                    <tr>
+                        <% for(let i=0; i<end;i++){ %>
+
+                            <th>
+                                <%= headName[i] %>
+                            </th>
+
+                            <% } %>
+                    </tr>
+                    <% for(let a=0; a<datLength;a++){ %>
+                        </tr>
+
+                        <% datSatz=Object.values(datErgebnis[a])%>
+                            <% for(let i=0; i<end;i++){ %>
+                                <% let inhalt=a+"+"+i; %>
+                                    <td class="cell" id=<%=inhalt %> >
+                                        <% let finder=datSatz[i] %>
+                                            <% let g=0 %>
+
+                                                <%= finder %>
+                                                    <% let projfinder={} %>
+                                                        <% projfinder.value=finder %>
+                                                            <% projfinder.a=a %>
+                                                                <% projfinder.i=i %>
+
+
+
+                                    </td>
+                                    <% } %>
+                                        <% } %>
+                                            </tr>
+                </table><br>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <script>//wird im client ausgeführt und ausgegeben
+        var suchobject1 = {}; // var für Bestimmung des zu ändernden Satzes
+        var suchobject2 = {}; // var für Bestimmung der zu ändernden Zelle
+        var abfrageTab = []; // var zum Übertragen der dto.
+        var x;  // var  zum Auswählen der entspr. Funktionen für dto.
+        var zelländerung = "";
+
+        const cellfind = document.getElementById("find"); //für Satz finden button
+        const cellchange = document.getElementById("change") // für Zelle finden button
+
+        var zwei = document.getElementsByClassName("cell"); //var für Zellinhalt
+        var hdnam = document.getElementsByTagName("th"); // var für Spaltenkopfinhalt
+        var suchkopf = document.getElementById("suko");
+        var suchwert = document.getElementById("suwe");
+        var suchzelle = document.getElementById("suze");
+        var suchzellenwert = document.getElementById("suzewt");
+        var senden1 = document.getElementById("send");
+        var ändern = document.getElementById("chng");
+        var löschen = document.getElementById("del");
+        var tabelleges = document.getElementById("gesamttab");
+        var buttonbody = document.getElementById("btnbody");
+        var ausg1 = "";
+        var ausg2 = "";
+
+
+        cellfind.addEventListener("click", rwert);
+        cellchange.style.visibility = "hidden";
+        cellchange.addEventListener("click", rwert1);
+        senden1.addEventListener("click", gesendet);
+        löschen.addEventListener("click", delete1);
+
+
+        function update1(e) {
+            e.preventDefault();
+
+        };
+
+        function delete1(e) {
+            e.preventDefault();
+            suchzelle.style.visibility = "hidden";
+            suchzellenwert.style.visibility = "hidden";
+            cellfind.style.visibility = "hidden";
+            cellchange.style.visibility = "hidden";            
+            zelländerung = "löschen";
+            x = 2;
+            dt1();
+
+
+        };
+
+
+        function rwert(e) { // Variable suchobject1 belegen
+            e.preventDefault();
+            x = 0;
+            dt1();//Zelle auslesen
+            cellfind.style.visibility = "hidden";
+            cellchange.style.visibility = "visible";
+            zelländerung = suchzellenwert.value;
+
+        };
+
+        function rwert1(e) { //Variable suchobject2 belegen
+            e.preventDefault();
+            cellchange.style.visibility = "hidden";
+            zelländerung = suchzellenwert.value;
+            x = 1;
+            dt1();
+
+        };
+
+        for (let z = 0; z < zwei.length; z++) {//Anzahl der ausgewählten Zellen bestimmen
+
+            zwei[z].addEventListener("click", dt1); //Zellen clickbar machen und auslesen
+
+            function dt1() {
+
+                //le.log("zwei[z]: ", zwei[z]);
+                //console.log("zwei[z].innerText: ", zwei[z].innerText);
+
+                let ID = (zwei[z]).id;
+                let spaltenNr = ID.split("+")[1];
+
+                //console.log("Spaltennummer: ", spaltenNr);
+
+                //console.log("kopf: ", hdnam[spaltenNr].innerText);
+
+                let satzNr = ID.split("+")[0];
+                //console.log("Satznummer: ", satzNr);
+
+
+                let tabellenName = "<%= suchID %> ";
+                //console.log("Tabellenname: ", tabellenName);
+
+
+                let text = zwei[z].innerText;
+                let kopf = hdnam[spaltenNr].innerText;
+
+
+                //object Konstruktor definieren und Objekte erstellen und mit Werte aus Tabelle belegen
+
+                function CellKonstruktor(tabellenName, satzNr, spaltenNr, text, kopf, zelländerung) {
+                    this.tablename = tabellenName;
+                    this.zeile = satzNr;
+                    this.column = spaltenNr;
+                    this.celltext = text;
+                    this.colkopf = kopf;
+                    this.suzelle = zelländerung;
+                };
+
+                if (x == 0) {
+                    suchobject1 = new CellKonstruktor(tabellenName, satzNr, spaltenNr, text, kopf, zelländerung)
+
+                    console.log(suchobject1);
+
+                    console.log(suchobject1.colkopf)
+                    suchkopf.textContent = suchobject1.colkopf, + "  ";
+                    suchwert.textContent = suchobject1.celltext;
+                };
+
+                if (x == 1) {
+                    suchobject2 = new CellKonstruktor(tabellenName, satzNr, spaltenNr, text, kopf, zelländerung)
+
+                    console.log(suchobject1);
+                    console.log(suchobject2);
+
+                    abfrageTab[0] = suchobject1;
+                    abfrageTab[1] = suchobject2;
+
+                    console.log(abfrageTab);
+
+                    suchzelle.textContent = suchobject2.colkopf;
+                    console.log(zelländerung);
+
+
+                };
+
+                if (x == 2) {
+                    suchobject2 = new CellKonstruktor(tabellenName, satzNr, spaltenNr, text, kopf, zelländerung);
+                    suchobject1 = new CellKonstruktor(tabellenName, satzNr, spaltenNr, text, kopf, zelländerung);
+                    suchkopf.textContent = suchobject1.colkopf, + "  ";
+                    suchwert.textContent = suchobject1.celltext;
+
+
+                    suchobject2.suzelle = "löschen";
+
+
+                    console.log(suchobject1);
+                    console.log(suchobject2);
+                    abfrageTab[0] = suchobject1;
+                    abfrageTab[1] = suchobject2;
+                    console.log(abfrageTab);
+
+
+                };
+
+
+            };
+
+        };
+
+        //postsend.addEventListener("click", gesendet)
+
+        async function gesendet(e) {
+            e.preventDefault();
+
+            const response = await fetch("./delup",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ parcel: abfrageTab })
+
+                });
+            const data = await response.json();
+            console.log("Rückgabewert: ", data);
+            if (await data) {
+                console.log("ergebnis ist da")
+
+            };
+            if (data.parcel[1].suzelle != "löschen") {
+                ausg2 = ("Zusatztext: " + data.sqlstatus);
+                ausg1 = ("In " + data.parcel[0].tablename + " wurde in der Spalte " + data.parcel[1].colkopf + " der Wert " + data.parcel[1].celltext + " zu " + data.parcel[1].suzelle + " geändert");
+                buttonbody.innerHTML = "<p style='color: bisque;'>" + "Ausgabe:" + "</p>";
+                tabelleges.innerHTML = ausg1 + "<br> <br>" + ausg2;
+                console.log("In ", data.parcel[0].tablename, " wurde in der Spalte ", data.parcel[1].colkopf, " der Wert ", data.parcel[1].celltext, " zu ", data.parcel[1].suzelle, " geändert");
+            };
+
+            if (data.parcel[1].suzelle == "löschen") {
+                ausg2 = ("Zusatztext: " + data.result.affectedRows +" Reihen wurden gelöscht.");
+                ausg1 = ("In " + data.parcel[0].tablename + " wurde der Datensatz der Spalte " + data.parcel[1].colkopf + " mit dem Wert " + data.parcel[1].celltext + " gelöscht ");
+                buttonbody.innerHTML = "<p style='color: bisque;'>" + "Ausgabe:" + data.parcel[1].suzelle + "</p>";
+                tabelleges.innerHTML = ausg1 + "<br> <br>" + ausg2;
+              
+            };
+
+        };
+    </script>
+</div>

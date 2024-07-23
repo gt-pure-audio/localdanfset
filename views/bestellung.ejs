@@ -1,0 +1,220 @@
+<%- include("layouts/default") %>
+<div class="container" >
+  <div>
+    <div class="col-12 d-flex justify-content-center mt-3">
+      <h1 style="color: bisque">Bestellung anlegen:</h1>
+    </div>
+
+    <div class="col-12  d-flex justify-content-center mt-3">
+      <form class="col-8 form-floating">      
+        <div class="form-floating mt-3">          
+          <input type="text" class="form-control" placeholder="place" name="MatNr" id="Mnr" value="<%= dbwert.danfid %>">
+          <label for="Mnr">Danfoss Satz ID: </label>
+        </div>
+        <div class="form-floating mt-3">          
+          <input type="text" class="form-control" placeholder="place" name="FepaNr" id="Fid" value="<%= dbwert.fepaBestNr %>">
+          <label for="Fid">Fepa Material ID: </label>
+        </div>
+
+        <div class="form-floating mt-3">          
+          <input type="text" class="form-control" placeholder="place" name="FepaPreis" id="FPr" value="<%= dbwert.fepaPreis %>">
+          <label for="FPr">Fepa Einzelpreis: </label>
+        </div>
+               
+        <div class="form-floating mt-3">          
+          <input type="number" class="form-control" placeholder="place" name="iNr" id="lhwNr" value="<%= dbwert.newintnum %>">
+          <label for="lhwNr">Fertigungsnummer intern: </label>
+        </div>
+
+        <div class="form-floating mt-3">         
+          <input  type="text" class="form-control" placeholder="place" name="Bestnr" id="Bnr">
+          <label for="Bnr">Danfoss PO Nummer:</label>
+        </div>
+        <div class="form-floating mt-3">         
+          <input type="text" name="Ordnr" class="form-control" placeholder="place" id="Onr">
+          <label for="Onr">Danfoss Order Nummer:</label>
+        </div>
+        <div class="form-floating mt-3">          
+          <input type="number" class="form-control" placeholder=1 name="Menge" id="Mng">
+          <label for="Mng">Menge: </label>
+        </div>
+       
+        <div class="form-floating mt-3">         
+          <input type="date" class="form-control" placeholder="2020-02-02" name="bstdat" id="bdt" >
+          <label for="bdt">Bestelldatum: </label>
+        </div>
+        <div class="form-floating mt-3">          
+          <input type="date" class="form-control" placeholder="2020-02-02" name="lfdatum" id="ldt">
+          <label for="ldt">Lieferdatum: </label>
+        </div>
+        <div class="form-floating mt-3">         
+          <input type="text" class="form-control" placeholder="place" name="sachb" id="sab" list="sblhw">
+          <label for="sab">Sachbearbeiter:</label>
+          <datalist id="sblhw">
+            <option value="Maurice Stäker"></option>
+            <option value="Thomas Gerhart"></option>
+            <option value="Björn Steen"></option>
+            <option value="Frank Wegerich"></option>
+            
+          </datalist>
+        </div>
+        <div class="form-floating mt-3">          
+          <input type="text" class="form-control" placeholder="place" name="sachb" id="sabda" list="sbdanf">
+          <label for="sab">SachbearbeiterDanfoss:</label>
+          <datalist id="sbdanf">
+            <option value="Martina Johna"></option>
+            <option value="Arne Herzog"></option>
+            <option value="Ramona Finnern"></option>
+                
+          </datalist>
+        </div>
+      </form>
+    </div>
+    <br><br>
+    <div class="kopfzeile">
+      <button id="post">Bestellung in db aufnehmen</button> <br><br>
+
+     
+    </div>
+   
+
+      <div class="kopfzeile">
+        <form action="../.">
+          <button type="submit">home</button>
+        </form>
+      </div> <br>
+ </div>  
+</div>
+
+  <script>
+    //html Elemente werden von JS gelesen
+
+    const postBtn = document.getElementById("post");
+
+    const BestNr = document.getElementById("Bnr");
+    const OrderNr = document.getElementById("Onr");
+    const SatzID = document.getElementById("Mnr");
+    const Menge = document.getElementById("Mng");
+    const internNr = document.getElementById("lhwNr");
+    const BestDat = document.getElementById("bdt");
+    const Lieferdat = document.getElementById("ldt");
+    const Sachbearbeiter = document.getElementById("sab");
+    const SachbearbeiterDanfoss = document.getElementById("sabda");
+
+    //Initialize
+
+    BestNr.value = "";
+    OrderNr.value = "";
+    //SatzID.value = "";
+    Menge.value = "";
+    //internNr.value="";
+    BestDat.value = "";
+    Lieferdat.value = "";
+    Sachbearbeiter.value = "";
+    SachbearbeiterDanfoss.value = "";
+
+   
+    postBtn.addEventListener("click", postInfo);
+
+    //POST REQUEST function
+
+    async function postInfo(e) {
+      e.preventDefault();
+
+      const Dichtsatz = {//Objekt Dichtsatz zur Übergabe vorbereiten
+        BestNr: BestNr.value,
+        OrderNr: OrderNr.value,
+        SatzID: SatzID.value,
+        Menge: Menge.value,
+        internNr: internNr.value,
+        BestDat: BestDat.value,
+        Lieferdat: Lieferdat.value,
+        Sachbearbeiter: Sachbearbeiter.value,
+        SachbearbeiterDanfoss: SachbearbeiterDanfoss.value
+      };
+      if (!Dichtsatz.BestNr || Dichtsatz.BestNr.length !== 10){
+        
+         alert("Danfoss Bestellnummer ungültig!");        
+        return;
+      };
+
+      if (!Dichtsatz.OrderNr || Dichtsatz.OrderNr.length !== 8){
+        
+       alert("Danfoss Ordernr ungültig!")
+       return;
+     };
+
+     if (!Dichtsatz.SatzID){
+        
+      alert("Satz ID fehlt!")
+     return;
+   };
+
+   if (!Dichtsatz.Menge){
+        
+    alert("Menge fehlt oder nicht korrekt!")
+   return;
+ };
+
+  if (!Dichtsatz.internNr){
+        
+    alert("interne Fertigungsnummer fehlt!")
+ return;
+};
+
+if (!Dichtsatz.BestDat){
+        
+   alert("Bestelldatum nicht korrekt!")
+ return;
+};
+
+if (!Dichtsatz.Lieferdat){
+        
+    alert("Lieferdatum nicht korrekt!")
+ return;
+};
+
+if (!Dichtsatz.Sachbearbeiter){
+        
+    alert("LHW Sachbearbeiter nicht korrekt!")
+ return;
+};
+
+if (!Dichtsatz.SachbearbeiterDanfoss){
+        
+    alert("Danfoss Sachbearbeiter nicht korrekt!")
+ return;
+};
+      console.log("Testausgabe1: ", Dichtsatz);
+      console.log("Datumlänge: ",Dichtsatz.Lieferdat.length);
+
+      let url = "/bestellung";
+
+let request = new Request(url, {
+  headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({Dichtsatz }),
+
+  method: "POST",
+});
+
+fetch(request)
+      .then((response) => {
+        return response.json()})
+      .then((data) => {let bestdata = JSON.parse(JSON.stringify(data))[0];
+        console.log ("antwort server: ", bestdata);
+        location.replace("./anlegen");
+        
+     
+
+})
+  
+ .catch ((error) => {
+  console.log ("Fehler im System-Errorlog-");
+ });
+
+    };
+     
+
+  </script>

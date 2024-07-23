@@ -1,0 +1,12 @@
+<%- include("layouts/default") %>
+<br><br>
+<h1>Post Test</h1>
+<form action="/posttest" method="post">
+    <input type="text" name="testname" value="">
+    <input type="text" name="testnachname" value="">
+    <button type="submit">
+anlegen
+    </button>
+</form>
+<br><br>
+<h1><%= locals.Ausgabetest %></h1>

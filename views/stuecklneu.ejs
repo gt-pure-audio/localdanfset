@@ -1,0 +1,144 @@
+<%- include("layouts/default") %>
+
+
+<div class="container">
+  <div>
+    <div class="col-12 d-flex justify-content-center mt-3">
+      <h1 style="color: bisque;">Artikel in Stückliste anlegen:</h1>
+          </div>
+
+
+    <div class="col-12  d-flex justify-content-center mt-3">
+      <form class="col-8 form-floating" id="myForm">
+
+        <div class="form-floating ">         
+          <input type="text" class="form-control" placeholder="11122333" value="value" autofocus="autofocus"  name="Bestnr" id="Bnr">
+          <label for="Bnr">Danfoss Bestell Nummer:</label>
+        </div>
+        <div class="form-floating mt-2">
+          <input type="number" class="form-control" placeholder=1 value=1 name="teile" id="teil">
+          <label for="teil">Anzahl der Einzelteile:</label>
+        </div>
+        <div class="form-floating mt-2">          
+          <input type="number" class="form-control" placeholder=1 value=1 name="tueten" id="tut">
+          <label for="tut">Anzahl der Zip Tüten: </label>
+        </div>
+        <div class="form-floating mt-2">          
+          <input type="number" class="form-control" placeholder=1 value=1 name="pappen" id="papp">
+          <label for="papp">Anzahl der Pappeinlagen: </label>
+        </div>
+
+        <div class="form-floating mt-2">          
+          <input type="number" class="form-control" placeholder=1 value=1 name="cop" id="kop">
+          <label for="kop">Anzahl der Foto Kopien: </label>
+        </div>
+        <div class="form-floating mt-2">          
+          <input type="date" class="form-control" placeholder="2020-02-02" value="2020-02-02" name="stnd" id="stand">
+          <label for="stand">Datenstand: </label>
+        </div>
+
+        <div class="form-floating mt-2">          
+          <input type="text" class="form-control" placeholder="11122333" value="value" name="mattxt" id="mtxt">
+          <label for="mtxt">Materialtext:</label>
+        </div>
+    </div>
+  </div>
+</form>        <br><br>
+    <div class="row ">
+      <div class="col-12 d-flex justify-content-center">
+         
+            <button id="post">Datensatz in Stückliste aufnehmen</button> <br><br>
+          </div>    
+          <div class="col-12 d-flex justify-content-center">
+            <form action="../.">
+              <button >home</button>
+            </form>
+       
+      </div>
+    </div>
+      <div>
+        <h3 id="ausgtext"></h3>
+      </div>
+
+   
+    
+  </div>
+
+
+  <script>
+    //html Elemente werden von JS gelesen
+
+    const postBtn = document.getElementById("post");
+
+    const BestNr = document.getElementById("Bnr");
+    const Teile = document.getElementById("teil");
+    const Tueten = document.getElementById("tut");
+    const Pappen = document.getElementById("papp");
+    const Kopien = document.getElementById("kop");
+    const Stand = document.getElementById("stand");
+    const Mattext = document.getElementById("mtxt");
+    const Myform = document.getElementById("myForm");
+    const ausgtext = document.getElementById("ausgtext");
+
+
+    //Initialize
+
+    BestNr.value = "";
+    Teile.value = "";
+    Tueten.value = "";
+    Pappen.value = "";
+    Kopien.value = "";
+    Stand.value = "";
+    Mattext.value = "";
+
+    postBtn.addEventListener("click", postInfo);
+
+    //POST REQUEST function
+
+    async function postInfo(e) {
+      e.preventDefault();
+
+      const Bestuecker = {//Objekt Bestuecker zur Übergabe vorbereiten
+        BestNr: BestNr.value,
+        Teile: Teile.value,
+        Tueten: Tueten.value,
+        Pappen: Pappen.value,
+        Kopien: Kopien.value,
+        Stand: Stand.value,
+        Mattext: Mattext.value
+      };
+      if (Bestuecker == "") {console.log("leere Variable");
+        return;
+      };
+      console.log("Testausgabe1: ", Bestuecker);
+
+    let url = "/stueck";
+
+      let request = new Request(url, {
+        headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({Bestuecker }),
+
+        method: "POST",
+      });
+      
+
+      fetch(request)
+      .then((response) => {
+        return response.json()})
+      .then((data) => {console.log("Antwort vom Server: ", data[0]);
+      let webausg=Object.values(data[0]);
+
+      ausgtext.innerHTML=webausg ;
+    })
+        
+       .catch ((error) => {
+        console.log ("Fehler im System-Errorlog-");
+       });   
+       
+      location.replace ("/auswahl/stueckliste") 
+
+    };
+
+  </script>

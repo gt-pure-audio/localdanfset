@@ -1,0 +1,119 @@
+<%- include("layouts/default") %>
+
+<div class="container">
+     <div class="col-12 d-flex justify-content-center mt-3">
+        <h2 style="color: bisque;">Wonach soll gesucht werden?</h2>
+     </div>
+
+    <div class="row">
+
+        <div class="col-12 d-flex" id="suchleiste"> <!--Schleife zum Erstellen der "Kopfschalter"-->
+
+            <% for(let i=0; i<end;i++){ %>
+
+                <div class="px-2">
+                    <%= idName="test" + (i) %> <!--Index für je einen Schalter wird erzeugt-->
+
+                        <form class="col-8">
+                            <button type="submit" style="height: 30px; width:150px; font-size :15px" id=<%=idName %>
+                                class="switch" >
+                                <%=headName[i]%> <!--Schalteraufdruck-->
+                            </button>
+                        </form>
+                </div> <br>
+                <% } %>
+
+        </div><br>
+    </div> 
+    <div class="col-12 d-flex justify-content-center">
+        <form >
+            <label for="swert" style="font-size: 20px;">Suchwert: </label>
+            <input  type="text" name="suwt" height="20px" id="swert">
+        </form>
+    </div>
+        <br><br>
+
+        <form class="kopfzeile" id="sender" >
+            <button type="submit" class="kopfzeile" id="senden">senden </button>
+        </form><br><br>
+
+
+        <form action="../." class="kopfzeile">
+            <button type="submit">home</button>
+        </form>
+
+</div>
+
+
+<script>
+
+    
+   var sqlsend={};
+   let sqlwert1;
+    let suchleiste = document.getElementById("suchleiste");
+    let suchwert = document.getElementById("swert");
+    let senden = document.getElementById("sender");
+    let zaehler = "<%= end %> ";
+    suchleiste.style.visibility = "visible";
+    suchwert.style.visibility = "hidden";
+    for (let count = 0; count < zaehler; count++) {
+        //console.log ("Zähler: ",count);
+        let idName = "<%= idName %>";
+        let btntest2 = document.getElementsByClassName("switch")
+        btntest2[count].addEventListener("click", a);
+
+        function a(e) {
+            e.preventDefault();
+
+            console.log("hat funktioniert");
+            console.log(suchleiste);
+            //console.log (typeof btntest2[count]);
+            console.log(btntest2[count].innerText);
+            sqlwert1 = btntest2[count].innerText;
+            console.log(sqlwert1);
+            sqlsend.sqlwert1=sqlwert1;
+            suchleiste.style.visibility = "hidden";
+            suchwert.style.visibility = "visible";
+            
+        };
+
+    };
+    senden.addEventListener("click", gesendet);
+
+
+    async function gesendet(e) {
+       e.preventDefault();
+        //suchwert:suchwert.value;
+        suchwert.style.visibility = "hidden";
+        senden.style.visibility = "hidden";
+        console.log("Suchwert: ", suchwert.value);
+        suchwert = suchwert.value;
+        console.log("ausgeführt",suchwert);
+        sqlsend.suchwert=suchwert;
+        //sqlsend.ID = ID;
+        console.log(sqlsend);
+       
+        let url = "/auswahl";
+
+let request = new Request(url, {
+  headers: {
+      "Content-Type": "application/json" 
+    },
+    body: JSON.stringify({sqlsend }),
+
+  method: "POST",
+});
+
+fetch(request)
+      .then((response) => {
+        return response.json()})
+      .then((data) => {console.log("Antwort vom Server: ", data)
+
+      let webausg=Object.values(data);
+      console.log("ausgabe auf web: ",webausg)
+      location.replace("/suchdat")
+    });   
+     
+    };   
+
+</script>

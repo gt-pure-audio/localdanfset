@@ -1,0 +1,131 @@
+<%- include("layouts/default") %>
+
+
+<div class="container">
+  <div>
+    <div class="col-12 d-flex justify-content-center mt-3">
+      <h1 style="color: bisque;">Daten für fehlende ET Mail:</h1>
+          </div>
+
+
+    <div class="col-12  d-flex justify-content-center mt-3">
+      <form class="col-8 form-floating" id="myForm">
+
+        <div class="form-floating ">         
+          <input type="number" class="form-control" placeholder=0  autofocus="autofocus"  name="iBestnr" id="Inr">
+          <label for="Inr">interne Bestell Nr (1-100):</label>
+        </div>
+        <div class="form-floating mt-2">
+          <input type="text" class="form-control" placeholder="ET" value="" name="teile" id="teilnr">
+          <label for="teilnr">Komponente Nr.:</label>
+        </div>
+        <div class="form-floating mt-2">          
+          <input type="number" class="form-control"  id="soll">
+          <label for="soll">Sollmenge: </label>
+        </div>
+        <div class="form-floating mt-2">          
+          <input type="number" class="form-control" id="ist">
+          <label for="ist">Istmenge: </label>
+        </div>
+       
+    </div>
+  </div>
+</form>        <br><br>
+    <div class="row ">
+      <div class="col-12 d-flex justify-content-center">
+         
+            <button id="post">E-Mail Formular ausfüllen</button> <br><br>
+          </div>    
+          <div class="col-12 d-flex justify-content-center">
+            <form action="../.">
+              <button >home</button>
+            </form>
+       
+      </div>
+    </div>
+      <div>
+        <h3 id="ausgtext"></h3>
+      </div>
+
+   
+    
+</div>
+
+
+  <script>
+    //html Elemente werden von JS gelesen
+
+    const postBtn = document.getElementById("post");
+
+    const Intnr = document.getElementById("Inr");
+    const ETnr = document.getElementById("teilnr");
+    let Sollmenge = document.getElementById("soll");
+    let Istmenge = document.getElementById("ist");
+
+   
+    
+
+   
+
+
+    /*Initialize
+
+    Intnr.value = "";
+    Teile.value = "";
+    Tueten.value = "";
+    Pappen.value = "";
+    Kopien.value = "";
+    Stand.value = "";
+    Mattext.value = "";*/
+
+    postBtn.addEventListener("click", postInfo);
+
+    //POST REQUEST function
+
+    async function postInfo(e) {
+      e.preventDefault();
+
+      let Mailinhalt = {//Objekt Mailinghalt zur Übergabe vorbereiten
+        Intnr: Intnr.value,
+        ETnr: ETnr.value,
+        Sollmenge: Sollmenge.value,      
+        Istmenge: Istmenge.value,
+      };
+        Mailinhalt.Fehlmenge = Number(Mailinhalt.Sollmenge) - Number(Mailinhalt.Istmenge);
+      
+      if (Mailinhalt == "") {console.log("leere Variable");
+        return;
+      };
+      console.log("Testausgabe1: ", Mailinhalt);
+
+    let url = "/mailform";
+
+      let request = new Request(url, {
+        headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({Mailinhalt}),
+
+        method: "POST",
+      });
+      
+
+      fetch(request)
+      .then((response) => {
+        return response.json()})
+      .then((data) => {console.log("Antwort vom Server: ", data[0]);
+      let webausg=Object.values(data[0]);
+
+      ausgtext.innerHTML=webausg ;
+      location.replace ("/mailform") 
+    })
+        
+       .catch ((error) => {
+        console.log ("Fehler im System-Errorlog-");
+       });   
+       
+     
+
+    };
+
+  </script>

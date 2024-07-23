@@ -1,0 +1,140 @@
+<%- include("layouts/default") %>
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-12 d-flex justify-content-center mt-3">
+            <h2 style="color: bisque;"> Danfoss Artikelnummer in Fepa angelegt?</h2><br><br>
+        </div>
+        
+       
+            <div class="col-lg-3 col-12 ">
+                <form class="form-floating  mt-3" id="text">
+                    
+                    <input autofocus="autofocus" type="text" class="form-control" placeholder="11122333" value="value" name="MatNr" id="Mnr">
+                    <label for="Mnr">Danfoss Artikel Nr.: </label>
+                </form>
+           
+                <button class="mt-4" id="pruef">Satz ID prüfen</button>
+           
+                <form class="mt-4" action="/calc">
+                    <button id="besteller" type="submit">Danfoss calc fortsetzen</button>
+                </form>
+           
+                <form class="mt-4" action="../.">
+                    <button type="submit">home</button>
+                </form>
+            </div> <br>
+
+            <div >
+                <h3 id="ausgtext"></h3>
+            </div>
+
+            <div style="color:beige">
+            
+            </div>
+                <div id="idv">
+                    <h1> Dieser Datensatz ist noch nicht angelegt!</h1>
+
+            </div>
+    </div>
+</div>
+
+<script>
+    //html Elemente werden von JS gelesen
+
+    const postBtn = document.getElementById("pruef");
+    const SatzID = document.getElementById("Mnr");
+    const bestellbutton = document.getElementById("besteller");
+    const idvorhanden = document.getElementById("idv");
+    const achtung = document.getElementById("achtung");
+    const text = document.getElementById("text");
+    const ausgtext = document.getElementById("ausgtext");
+
+
+    //Initialize
+
+    SatzID.value = "";
+    idvorhanden.innerHTML = "";
+    postBtn.addEventListener("click", postInfo1);
+    bestellbutton.textContent ="Danfoss Calc gesperrt!"
+    bestellbutton.setAttribute('disabled','disabled');
+    
+
+
+    //POST REQUEST function
+
+    async function postInfo1(e) {
+        e.preventDefault();
+
+        const Dichtsatz = {//Objekt Dichtsatz zur Übergabe vorbereiten
+
+            SatzID: SatzID.value,
+
+        };
+
+
+        if (!Dichtsatz.SatzID) {
+
+            alert("Satz ID fehlt!")
+            return;
+        };
+
+
+        console.log("Testausgabe1: ", Dichtsatz);
+
+        let url = "/satzid";
+
+let request = new Request(url, {
+  headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({Dichtsatz }),
+
+  method: "POST",
+});
+
+fetch(request)
+      .then((response) => {
+        return response.json()})
+      .then((data) => {console.log("Antwort vom Server: ", data)
+
+      let webausg=Object.values(data);
+      console.log("ausgabe auf web: ",webausg);
+      display(data);
+
+ausgtext.innerHTML=webausg ;
+
+    })
+       
+       .catch ((error) => {
+        console.log ("Fehler im System-Errorlog-");
+       });
+        // Myform.reset()
+       
+
+    };
+
+    function display(data) {
+       
+
+        if (data=="kein Datenbankeintrag vorhanden") {
+            idvorhanden.style.color="red";
+            idvorhanden.style.fontSize = "30px";
+            idvorhanden.innerHTML = "Der Datensatz ist noch nicht angelegt!";bestellbutton.textContent ="Danfoss Calc gesperrt!"
+            bestellbutton.setAttribute('disabled','disabled');
+            
+        }
+        else if (SatzID.value == "") {
+            idvorhanden.innerHTML = "";
+        } else {
+            idvorhanden.style.color = "white";
+            idvorhanden.style.fontSize = "30px";
+            idvorhanden.innerHTML = "Der Datensatz ist ok und kann verwendet werden!";
+            bestellbutton.removeAttribute('disabled');
+            bestellbutton.textContent ="Danfoss Calc fortsetzen?"
+
+        };
+       
+    };   
+   
+   
+</script>
